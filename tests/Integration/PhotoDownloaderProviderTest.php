@@ -22,7 +22,7 @@ class PhotoDownloaderProviderTest extends TestCase
     /**
      *
      */
-    public function _testDownload()
+    public function testDownload()
     {
         /** @var PhotoStorage $downloader */
         $downloader = $this->app->make(PhotoStorage::class);
@@ -56,7 +56,6 @@ class PhotoDownloaderProviderTest extends TestCase
 
         $this->expectException(PhotoNotFoundException::class);
 
-        $res = $downloader->getForDate($date);
-        var_dump($res);
+        $downloader->getForDate($date);
     }
 }

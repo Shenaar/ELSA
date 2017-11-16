@@ -3,7 +3,7 @@
 namespace App\Service\Reporter;
 
 /**
- *
+ * The entity for a status report.
  */
 class Report
 {
@@ -32,7 +32,7 @@ class Report
     /**
      * @return string
      */
-    public function getKey(): string
+    public function getKey()
     {
         return $this->key;
     }
@@ -40,7 +40,7 @@ class Report
     /**
      * @return string
      */
-    public function getValue(): string
+    public function getValue()
     {
         return $this->value;
     }

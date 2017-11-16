@@ -51,7 +51,7 @@ class Photo
      *
      * @return Photo
      */
-    public function setData(string $data): Photo
+    public function setData(string $data)
     {
         $this->data = $data;
 

@@ -32,7 +32,7 @@ class DownloadDaysTime extends AbstractDownloadCommand
         $endDate = (new Carbon($this->argument('endDate')))->setTime($hours, $minutes, 59);
 
         $result = new Collection();
-        while($startDate->lessThan($endDate)) {
+        while ($startDate->lessThan($endDate)) {
             $result->push(clone $startDate);
             $startDate->addDay();
         }

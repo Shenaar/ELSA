@@ -31,7 +31,7 @@ class DownloadFullDays extends AbstractDownloadCommand
         $endDate = (new Carbon($this->argument('endDate')))->setTime(23, 59, 59);
 
         $result = new Collection();
-        while($startDate->lessThan($endDate)) {
+        while ($startDate->lessThan($endDate)) {
             $result->push(clone $startDate);
             $startDate->addMinutes(30);
         }
