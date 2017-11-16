@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * Just iterating over every available generator.
+ * Just iterates over every available generator.
  */
 class SimplePathsGenerator implements PathsGenerator
 {

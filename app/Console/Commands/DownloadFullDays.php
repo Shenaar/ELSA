@@ -20,7 +20,7 @@ class DownloadFullDays extends AbstractDownloadCommand
      *
      * @var string
      */
-    protected $description = '';
+    protected $description = 'Downloads all photos between {startDate} and {endDate}';
 
     /**
      * @inheritdoc
@@ -37,5 +37,16 @@ class DownloadFullDays extends AbstractDownloadCommand
         }
 
         return $result;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getFilename()
+    {
+        $startDate = (new Carbon($this->argument('startDate')))->setTime(0, 0, 0);
+        $endDate = (new Carbon($this->argument('endDate')))->setTime(23, 59, 59);
+
+        return $startDate->format('d.m.Y') . '-' . $endDate->format('d.m.Y');
     }
 }

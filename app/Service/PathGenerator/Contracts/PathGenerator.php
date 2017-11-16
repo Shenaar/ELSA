@@ -4,7 +4,7 @@ namespace App\Service\PathGenerator\Contracts;
 
 use Carbon\Carbon;
 
-/*
+/**
  * Used to generate a path for a date.
  */
 interface PathGenerator

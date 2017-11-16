@@ -6,7 +6,7 @@ use App\Service\Photo;
 use App\Service\PhotoProcessor\Contracts\PhotoProcessor;
 
 /**
- * Adds a timestamp to a photo.
+ * Resizes a photo.
  */
 class Resize implements PhotoProcessor
 {

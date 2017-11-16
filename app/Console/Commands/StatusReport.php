@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Service\Reporter\StatusReporter;
+
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Foundation\Application;
 

@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 
 /**
  * "Smart choosing" a generator.
+ * The naming was changed on 1 June 2017.
  */
 class SmartPathsGenerator implements PathsGenerator
 {
@@ -34,7 +35,12 @@ class SmartPathsGenerator implements PathsGenerator
      */
     public function getForDate(Carbon $date)
     {
+        $theFirstDate = new Carbon('24.02.2017');
         $startNew = new Carbon('01.06.2017');
+
+        if ($date->isFuture() || $date->lessThan($theFirstDate)) {
+            return collect();
+        }
 
         if ($date->lessThan($startNew)) {
             return collect($this->generators[1]->getForDate($date));

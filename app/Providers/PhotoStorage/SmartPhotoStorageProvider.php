@@ -3,6 +3,8 @@
 namespace App\Providers\PhotoStorage;
 
 use App\Service\PhotoStorage\Contracts\PhotoStorage;
+use App\Service\PhotoStorage\SmartPhotoStorage\Commands\DumpCommand;
+use App\Service\PhotoStorage\SmartPhotoStorage\Commands\RestoreCommand;
 use App\Service\PhotoStorage\SmartPhotoStorage\MissingCacheCountReport;
 use App\Service\PhotoStorage\SmartPhotoStorage\SmartPhotoStorage;
 
@@ -30,5 +32,7 @@ class SmartPhotoStorageProvider extends ServiceProvider
         $this->app->bind(PhotoStorage::class, SmartPhotoStorage::class);
 
         $this->app->tag([MissingCacheCountReport::class], 'reports');
+
+        $this->commands(DumpCommand::class, RestoreCommand::class);
     }
 }

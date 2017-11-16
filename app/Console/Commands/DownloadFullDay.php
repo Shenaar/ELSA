@@ -20,7 +20,7 @@ class DownloadFullDay extends AbstractDownloadCommand
      *
      * @var string
      */
-    protected $description = '';
+    protected $description = 'Downloads all photos for {date}';
 
     /**
      * @inheritdoc
@@ -36,5 +36,14 @@ class DownloadFullDay extends AbstractDownloadCommand
         }
 
         return $result;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getFilename()
+    {
+        return (new Carbon($this->argument('date')))
+            ->format('d.m.Y');
     }
 }

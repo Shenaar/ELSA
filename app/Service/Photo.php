@@ -5,7 +5,7 @@ namespace App\Service;
 use Carbon\Carbon;
 
 /**
- * An entity for a photo.
+ * The entity for a photo.
  */
 class Photo
 {

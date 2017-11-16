@@ -11,7 +11,7 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Collection;
 
 /**
- *
+ * Remembers known missing photos.
  */
 class SmartPhotoStorage implements PhotoStorage
 {
@@ -66,19 +66,6 @@ class SmartPhotoStorage implements PhotoStorage
     }
 
     /**
-     * @param Carbon $date
-     * @return bool
-     */
-    private function isMissing(Carbon $date)
-    {
-        $hour = $date->hour;
-        $minute = $date->minute;
-
-        return ($hour === 8 && $minute === 30) || ($hour === 9) || ($hour === 10 && $minute === 0) ||
-            $this->cache->search($date->toDateTimeString());
-    }
-
-    /**
      * @param bool $reread
      *
      * @return Collection
@@ -90,5 +77,27 @@ class SmartPhotoStorage implements PhotoStorage
         }
 
         return $this->cache;
+    }
+
+    /**
+     * @param Collection $cache
+     */
+    public function setCache(Collection $cache)
+    {
+        $this->cache = $cache;
+        $this->cacheRepository->forever(__CLASS__ . '.missing_photos', $this->cache);
+    }
+
+    /**
+     * @param Carbon $date
+     * @return bool
+     */
+    private function isMissing(Carbon $date)
+    {
+        $hour = $date->hour;
+        $minute = $date->minute;
+
+        return ($hour === 8 && $minute === 30) || ($hour === 9) || ($hour === 10 && $minute === 0) ||
+            $this->cache->search($date->toDateTimeString());
     }
 }

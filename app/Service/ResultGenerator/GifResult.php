@@ -16,12 +16,18 @@ class GifResult implements ResultGenerator
     private $gif;
 
     /**
+     * @var int
+     */
+    private $count;
+
+    /**
      * GifResult constructor.
      */
     public function __construct()
     {
         $this->gif = new \Imagick();
         $this->gif->setFormat('gif');
+        $this->count = 0;
     }
 
     /**
@@ -34,10 +40,18 @@ class GifResult implements ResultGenerator
         $frame->setImageDelay(10);
 
         $this->gif->addImage($frame);
+        ++$this->count;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function store($path)
     {
+        if ($this->count === 0) {
+            return;
+        }
+
         $this->gif->writeImages($path . '.gif', true);
     }
 

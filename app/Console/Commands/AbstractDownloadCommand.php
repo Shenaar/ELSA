@@ -27,6 +27,7 @@ abstract class AbstractDownloadCommand extends Command
 
     /**
      * DownloadFullDay constructor.
+     *
      * @param PhotoStorage $photoStorage
      */
     public function __construct(PhotoStorage $photoStorage)
@@ -35,8 +36,8 @@ abstract class AbstractDownloadCommand extends Command
 
         $this->photoStorage = $photoStorage;
 
-        $this->addOption('filename', '', InputOption::VALUE_OPTIONAL, '', str_random(6));
-        $this->addOption('format', '', InputOption::VALUE_OPTIONAL, '', 'Zip');
+        $this->addOption('filename', '', InputOption::VALUE_OPTIONAL, '', null);
+        $this->addOption('format', '', InputOption::VALUE_OPTIONAL, '', 'null');
         $this->addOption('processor', 'p', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, '', []);
     }
 
@@ -55,6 +56,7 @@ abstract class AbstractDownloadCommand extends Command
             'Missing' => 0,
             'Retries' => 0,
         ];
+        $startTime = microtime(true);
 
         for ($i = 0; $i < $dates->count(); ) {
             $date = $dates->get($i);
@@ -63,7 +65,11 @@ abstract class AbstractDownloadCommand extends Command
                 $photo = $this->photoStorage->getForDate($date);
                 $photo = $this->preProcess($photo);
                 ++$report['Success'];
-                $generator->addPhoto($photo);
+
+                if ($photo) {
+                    $generator->addPhoto($photo);
+                }
+
             } catch (PhotoNotFoundException $exception) {
                 $this->output->newLine();
                 $this->output->note($exception->getMessage());
@@ -83,9 +89,10 @@ abstract class AbstractDownloadCommand extends Command
         $this->output->newLine();
         $this->output->table(array_keys($report), [array_values($report)]);
 
-        $path = storage_path('results/' . $this->option('filename'));
+        $path = storage_path('results/' . ($this->option('filename') ? : $this->getFilename()));
         $this->output->writeln('Storing result as a ' . get_class($generator) . ' in ' . $path);
         $generator->store($path);
+        $this->output->success(sprintf('Finished in %.2fs', (microtime(true) - $startTime)));
     }
 
     /**
@@ -112,6 +119,10 @@ abstract class AbstractDownloadCommand extends Command
             $processor = resolve('App\\Service\\PhotoProcessor\\' . ucfirst($item));
 
             $photo = $processor->process($photo);
+
+            if (is_null($photo)) {
+                return null;
+            }
         }
 
         return $photo;
@@ -123,4 +134,11 @@ abstract class AbstractDownloadCommand extends Command
      * @return Collection|Carbon[]
      */
     abstract protected function getDatesList();
+
+    /**
+     * Generates a default filename for a command's result.
+     *
+     * @return string
+     */
+    abstract protected function getFilename();
 }

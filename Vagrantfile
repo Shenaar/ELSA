@@ -67,4 +67,13 @@ Vagrant.configure("2") do |config|
   #   apt-get update
   #   apt-get install -y apache2
   # SHELL
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo apt-get update && apt-get install php-imagick -y
+    echo 'alias monitor="clear && php artisan monitor --delay=10"' >> /home/vagrant/.bashrc
+    echo 'alias status="php artisan status"' >> /home/vagrant/.bashrc
+    cd /vagrant && php artisan smart:restore dump.dump
+    composer self-update
+  SHELL
+
 end
