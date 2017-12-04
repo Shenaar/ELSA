@@ -35,6 +35,10 @@ class LocalPhotoStorageProvider extends ServiceProvider
         $this->app->bind(PhotoStorage::class, LocalPhotoStorage::class);
     }
 
+    /**
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
     public function register()
     {
         /** @var FilesystemManager $fsManager */

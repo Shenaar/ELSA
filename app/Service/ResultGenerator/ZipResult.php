@@ -49,12 +49,12 @@ class ZipResult implements ResultGenerator
     /**
      * @inheritdoc
      */
-    public function store($path)
+    public function store(string $path)
     {
         $this->zipper->zip($path . '.zip');
         $this->zipper->folder('ELSA');
 
-        $this->files->each(function ($photo, $filename) {
+        $this->files->each(function (string $photo, string $filename) {
             $this->zipper->addString($filename, $photo);
         });
 

@@ -46,7 +46,7 @@ class GifResult implements ResultGenerator
     /**
      * @inheritdoc
      */
-    public function store($path)
+    public function store(string $path)
     {
         if ($this->count === 0) {
             return;

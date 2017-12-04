@@ -2,7 +2,6 @@
 
 namespace App\Providers\PhotoStorage;
 
-use App\Service\PhotoStorage\CheckFilesPhotoStorage;
 use App\Service\PhotoStorage\Contracts\PhotoStorage;
 use App\Service\PhotoStorage\FilesystemPhotoStorage;
 
@@ -18,7 +17,8 @@ class PhotoStorageProvider extends ServiceProvider
     const ELECTRO_L2_FTP = 'electro_l_2_ftp';
 
     /**
-     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function register()
     {

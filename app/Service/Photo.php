@@ -24,7 +24,7 @@ class Photo
      * @param Carbon $date
      * @param string $data
      */
-    public function __construct(Carbon $date, $data)
+    public function __construct(Carbon $date, string $data)
     {
         $this->date = $date;
         $this->data = $data;

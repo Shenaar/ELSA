@@ -45,7 +45,7 @@ class LocalPhotoStorage implements PhotoStorage
     {
         $path = $this->generatePath($date);
         try {
-            $photo = new Photo($date,  $this->fileSystem->get($path));
+            $photo = new Photo($date, $this->fileSystem->get($path));
 
             return $photo;
         } catch (FileNotFoundException $exception) {
@@ -82,6 +82,7 @@ class LocalPhotoStorage implements PhotoStorage
 
     /**
      * @param Carbon $date
+     *
      * @return string
      */
     protected function generatePath(Carbon $date)

@@ -58,7 +58,7 @@ abstract class AbstractDownloadCommand extends Command
         ];
         $startTime = microtime(true);
 
-        for ($i = 0; $i < $dates->count(); ) {
+        for ($i = 0; $i < $dates->count();) {
             $date = $dates->get($i);
 
             try {
@@ -112,7 +112,7 @@ abstract class AbstractDownloadCommand extends Command
      *
      * @return Photo
      */
-    private function preProcess($photo)
+    private function preProcess(Photo $photo)
     {
         foreach ($this->option('processor') as $item) {
             /** @var PhotoProcessor $processor */

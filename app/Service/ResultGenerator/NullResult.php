@@ -20,7 +20,7 @@ class NullResult implements ResultGenerator
     /**
      * @inheritdoc
      */
-    public function store($path)
+    public function store(string $path)
     {
     }
 

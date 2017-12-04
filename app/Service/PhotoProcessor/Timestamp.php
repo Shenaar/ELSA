@@ -32,10 +32,11 @@ class Timestamp implements PhotoProcessor
 
     /**
      * Timestamp constructor.
-     * @param int $x
-     * @param int $y
-     * @param $color
-     * @param int $fontSize
+     *
+     * @param int   $x
+     * @param int   $y
+     * @param mixed $color
+     * @param int   $fontSize
      */
     public function __construct($x, $y, $color, $fontSize)
     {
@@ -58,7 +59,7 @@ class Timestamp implements PhotoProcessor
         $draw->setFillColor($this->color);
         $draw->setFontSize($this->fontSize);
 
-        $image->annotateImage($draw, $this->x, $this->y,0, $photo->getDate()->format('d.m.Y H:i'));
+        $image->annotateImage($draw, $this->x, $this->y, 0, $photo->getDate()->format('d.m.Y H:i'));
 
         $photo->setData($image->getImageBlob());
 

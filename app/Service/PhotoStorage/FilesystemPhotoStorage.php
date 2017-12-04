@@ -62,8 +62,10 @@ class FilesystemPhotoStorage implements PhotoStorage
      * @param string $path
      *
      * @return string
+     *
+     * @throws FileNotFoundException
      */
-    protected function download($path)
+    protected function download(string $path)
     {
         return $this->fileSystem->get($path);
     }

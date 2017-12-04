@@ -23,5 +23,5 @@ interface ResultGenerator
      *
      * @return mixed
      */
-    public function store($path);
+    public function store(string $path);
 }

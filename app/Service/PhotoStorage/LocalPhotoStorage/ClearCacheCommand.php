@@ -40,7 +40,7 @@ class ClearCacheCommand extends Command
             return;
         }
 
-        collect($storage->getFileSystem()->directories())->each(function ($item) use ($storage) {
+        collect($storage->getFileSystem()->directories())->each(function (string $item) use ($storage) {
             $storage->getFileSystem()->deleteDirectory($item);
         });
 

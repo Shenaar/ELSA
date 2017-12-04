@@ -5,6 +5,7 @@ namespace App\Service\PhotoStorage\SmartPhotoStorage\Commands;
 use App\Service\PhotoStorage\SmartPhotoStorage\SmartPhotoStorage;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 
 /**
@@ -24,6 +25,7 @@ class RestoreCommand extends Command
 
     /**
      * DumpCommand constructor.
+     *
      * @param SmartPhotoStorage $storage
      */
     public function __construct(SmartPhotoStorage $storage)
@@ -35,6 +37,8 @@ class RestoreCommand extends Command
 
     /**
      * @param Filesystem $fs
+     *
+     * @throws FileNotFoundException
      */
     public function handle(Filesystem $fs)
     {

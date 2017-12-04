@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Service\PathGenerator\Contracts\PathsGenerator;
 use App\Service\PathGenerator\Generators\NewPathGenerator;
 use App\Service\PathGenerator\Generators\OldPathGenerator;
-use App\Service\PathGenerator\SimplePathsGenerator;
 
 use App\Service\PathGenerator\SmartPathsGenerator;
 use Illuminate\Support\ServiceProvider;

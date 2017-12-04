@@ -15,6 +15,8 @@ use Illuminate\Support\Collection;
  */
 class SmartPhotoStorage implements PhotoStorage
 {
+    const KEY = __CLASS__ . '.missing_photos';
+
     /**
      * @var PhotoStorage
      */
@@ -40,7 +42,7 @@ class SmartPhotoStorage implements PhotoStorage
     {
         $this->storage = $storage;
         $this->cacheRepository = $cacheRepository;
-        $this->cache = $cacheRepository->get(__CLASS__ . '.missing_photos', new Collection());
+        $this->cache = $cacheRepository->get(self::KEY, new Collection());
     }
 
     /**
@@ -58,7 +60,7 @@ class SmartPhotoStorage implements PhotoStorage
 
             if ($date->isPast()) {
                 $this->cache->push($date->toDateTimeString());
-                $this->cacheRepository->forever(__CLASS__ . '.missing_photos', $this->cache);
+                $this->cacheRepository->forever(self::KEY, $this->cache);
             }
 
             throw $exception;
@@ -73,7 +75,7 @@ class SmartPhotoStorage implements PhotoStorage
     public function getCache($reread = false)
     {
         if ($reread) {
-            $this->cache = $this->cacheRepository->get(__CLASS__ . '.missing_photos', new Collection());
+            $this->cache = $this->cacheRepository->get(self::KEY, new Collection());
         }
 
         return $this->cache;
@@ -85,7 +87,7 @@ class SmartPhotoStorage implements PhotoStorage
     public function setCache(Collection $cache)
     {
         $this->cache = $cache;
-        $this->cacheRepository->forever(__CLASS__ . '.missing_photos', $this->cache);
+        $this->cacheRepository->forever(self::KEY, $this->cache);
     }
 
     /**
@@ -97,7 +99,8 @@ class SmartPhotoStorage implements PhotoStorage
         $hour = $date->hour;
         $minute = $date->minute;
 
-        return ($hour === 8 && $minute === 30) || ($hour === 9) || ($hour === 10 && $minute === 0) ||
+        return $date->isFuture() ||
+            ($hour === 8 && $minute === 30) || ($hour === 9) || ($hour === 10 && $minute === 0) ||
             $this->cache->search($date->toDateTimeString());
     }
 }

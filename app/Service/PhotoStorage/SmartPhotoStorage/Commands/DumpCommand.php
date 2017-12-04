@@ -28,6 +28,7 @@ class DumpCommand extends Command
 
     /**
      * DumpCommand constructor.
+     *
      * @param SmartPhotoStorage $storage
      */
     public function __construct(SmartPhotoStorage $storage)
