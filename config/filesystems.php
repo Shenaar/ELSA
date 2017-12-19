@@ -59,7 +59,7 @@ return [
             'driver' => 'local',
             'root' => storage_path('photos'),
             'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
+            'visibility' => 'private',
         ],
 
         'electro_l_2_ftp' => [
@@ -67,7 +67,13 @@ return [
             'host'     => 'ftp.ntsomz.ru',
             'username' => 'electro',
             'password' => 'electro',
-        ]
+        ],
+
+        'smart_dump' => [
+            'driver'     => 'local',
+            'root'       => storage_path('dump'),
+            'visibility' => 'private',
+        ],
     ],
 
 ];
