@@ -73,11 +73,9 @@ class FullEarthResult implements ResultGenerator
 
         $i = 0;
         foreach ($this->frames as $x => $row) {
-
             $result = new ImagickDraw();
             $result->setResolution(count($this->frames), count($this->frames[0]));
             $result->setFillColor(new ImagickPixel('black'));
-
 
             foreach ($row as $y => $pixel) {
                 ++$i;
@@ -85,12 +83,16 @@ class FullEarthResult implements ResultGenerator
                     continue;
                 }
 
-                $img->drawImage($result);
                 $drawPixel = new ImagickPixel($pixel->getMostFrequent());
 
                 $result->setFillColor($drawPixel);
                 $result->point($x, $y);
             }
+
+            $img->drawImage($result);
+
+            $result->destroy();
+            unset($result);
 
             echo ($i) . ' of ' . (count($this->frames) * count($this->frames[0])) . PHP_EOL;
         }
