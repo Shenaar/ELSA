@@ -8,7 +8,7 @@ return [
         'color' => 'white',
     ],
     'resize' => [
-        'width' =>  800,
-        'height' => 800
+        'width' =>  500,
+        'height' => 500
     ],
 ];
