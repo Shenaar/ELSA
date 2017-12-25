@@ -2,6 +2,7 @@
 
 namespace App\Service\CloudCleaner\Contracts;
 
+use App\Service\Color;
 use App\Service\Photo;
 
 /**
@@ -24,7 +25,12 @@ interface CloudCleaner
      * @param int $x
      * @param int $y
      *
-     * @return string Color of the pixel
+     * @return Color Color of the pixel
      */
     public function getPixelColor($x, $y);
+
+    /**
+     * @return Color[][] Resulting map of the colors
+     */
+    public function getResult();
 }

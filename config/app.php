@@ -183,6 +183,8 @@ return [
         App\Providers\PhotoStorage\PhotoStorageProvider::class,
         App\Providers\PhotoStorage\LocalPhotoStorageProvider::class,
         App\Providers\PhotoStorage\SmartPhotoStorageProvider::class,
+
+        App\Providers\CloudCleanerProvider::class,
     ],
 
     /*

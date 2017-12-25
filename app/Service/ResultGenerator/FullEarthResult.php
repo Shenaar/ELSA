@@ -2,10 +2,10 @@
 
 namespace App\Service\ResultGenerator;
 
+use App\Service\CloudCleaner\Contracts\CloudCleaner;
+use App\Service\Color;
 use App\Service\Photo;
 use App\Service\ResultGenerator\Contracts\ResultGenerator;
-
-use Illuminate\Support\Collection;
 
 use \Imagick;
 use \ImagickDraw;
@@ -17,16 +17,18 @@ use \ImagickPixel;
 class FullEarthResult implements ResultGenerator
 {
     /**
-     * @var PixelFrequency[][]
+     * @var CloudCleaner
      */
-    private $frames;
+    private $cloudCleaner;
 
     /**
      * FullEarthResult constructor.
+     *
+     * @param CloudCleaner $cloudCleaner
      */
-    public function __construct()
+    public function __construct(CloudCleaner $cloudCleaner)
     {
-        $this->frames = [];
+        $this->cloudCleaner = $cloudCleaner;
     }
 
     /**
@@ -34,31 +36,7 @@ class FullEarthResult implements ResultGenerator
      */
     public function addPhoto(Photo $photo)
     {
-        $imagick = new Imagick();
-
-        $imagick->readImageBlob($photo->getData());
-
-        $size = $imagick->getImageGeometry();
-
-        for ($x = 0; $x < $size['width']; ++$x) {
-            for ($y = 0; $y < $size['height']; ++$y) {
-                $color = $imagick->getImagePixelColor($x, $y)->getColor();
-                $hex = '#' . sprintf('%02x%02x%02x', $color['r'], $color['g'], $color['b']);
-
-                if (!isset($this->frames[$x])) {
-                    $this->frames[$x] = [];
-                }
-
-                if (!isset($this->frames[$x][$y])) {
-                    $this->frames[$x][$y] = new PixelFrequency();
-                }
-
-                $pixel = $this->frames[$x][$y];
-                $pixel->addOccurance($hex);
-            }
-        }
-
-        $imagick->destroy();
+        $this->cloudCleaner->addPhoto($photo);
     }
 
     /**
@@ -66,24 +44,32 @@ class FullEarthResult implements ResultGenerator
      */
     public function store(string $path)
     {
+        $resultMap = $this->cloudCleaner->getResult();
+
+        $width = count($resultMap);
+        $height = count($resultMap[0]);
+
         $img = new Imagick();
-        $img->newImage(count($this->frames), count($this->frames[0]), new ImagickPixel('black'));
+        $img->newImage($width, $height, new ImagickPixel('black'));
         $img->setImageFormat('jpg');
-        $img->setImageDepth(1);
+        $img->setImageDepth(6);
 
         $i = 0;
-        foreach ($this->frames as $x => $row) {
+
+        for ($x = 0; $x < $width; ++$x) {
             $result = new ImagickDraw();
-            $result->setResolution(count($this->frames), count($this->frames[0]));
+            $result->setResolution($width, $height);
             $result->setFillColor(new ImagickPixel('black'));
 
-            foreach ($row as $y => $pixel) {
+            for ($y = 0; $y < $height; ++$y) {
+                /** @var Color $color */
+                $color = $resultMap[$x][$y];
                 ++$i;
-                if ($pixel->getMostFrequent() === '#000000') {
+                if ($color->toHexString() === '#000000') {
                     continue;
                 }
 
-                $drawPixel = new ImagickPixel($pixel->getMostFrequent());
+                $drawPixel = new ImagickPixel($color->toHexString());
 
                 $result->setFillColor($drawPixel);
                 $result->point($x, $y);
@@ -93,12 +79,8 @@ class FullEarthResult implements ResultGenerator
 
             $result->destroy();
             unset($result);
-
-            echo ($i) . ' of ' . (count($this->frames) * count($this->frames[0])) . PHP_EOL;
         }
 
         $img->writeImage($path . '.jpg');
     }
-
-
 }

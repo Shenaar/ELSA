@@ -2,6 +2,7 @@
 
 namespace App\Service\CloudCleaner\Contracts;
 
+use App\Service\Color;
 use App\Service\Photo;
 
 /**
@@ -12,7 +13,7 @@ interface ColorMapper
     /**
      * @param Photo $photo
      *
-     * @return string[][]
+     * @return Color[][]
      */
     public function map(Photo $photo);
 }

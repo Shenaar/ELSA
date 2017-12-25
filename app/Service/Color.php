@@ -25,9 +25,9 @@ class Color
     /**
      * Color constructor.
      *
-     * @param int $red
-     * @param int $green
-     * @param int $blue
+     * @param int $red   Red color value between 0 and 255
+     * @param int $green Green color value between 0 and 255
+     * @param int $blue  Blue color value between 0 and 255
      *
      * @throws \InvalidArgumentException
      */
@@ -46,6 +46,34 @@ class Color
     }
 
     /**
+     * Creates a Color from an [r, g, b] array.
+     *
+     * @param array $array
+     *
+     * @return Color
+     */
+    public static function fromArray(array $array)
+    {
+        return new static($array['r'], $array['g'], $array['b']);
+    }
+
+    /**
+     * Creates a Color from a string "#RRGGBB".
+     *
+     * @param string $hex
+     *
+     * @return Color
+     */
+    public static function fromHex(string $hex)
+    {
+        return new static(
+            hexdec($hex[1] . $hex[2]),
+            hexdec($hex[3] . $hex[4]),
+            hexdec($hex[5] . $hex[6])
+        );
+    }
+
+    /**
      * Returns a HEX string (#11AABB) representing the color.
      *
      * @return string
@@ -58,7 +86,7 @@ class Color
     /**
      * @return int
      */
-    public function getRed(): int
+    public function getRed()
     {
         return $this->red;
     }
@@ -66,7 +94,7 @@ class Color
     /**
      * @return int
      */
-    public function getGreen(): int
+    public function getGreen()
     {
         return $this->green;
     }
@@ -74,7 +102,7 @@ class Color
     /**
      * @return int
      */
-    public function getBlue(): int
+    public function getBlue()
     {
         return $this->blue;
     }
