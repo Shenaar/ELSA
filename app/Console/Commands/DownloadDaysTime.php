@@ -31,6 +31,17 @@ class DownloadDaysTime extends AbstractDownloadCommand
         $startDate = (new Carbon($this->argument('startDate')))->setTime($hours, $minutes, 0);
         $endDate = (new Carbon($this->argument('endDate')))->setTime($hours, $minutes, 59);
 
+        return $this->generateRange($startDate, $endDate);
+    }
+
+    /**
+     * @param Carbon $startDate
+     * @param Carbon $endDate
+     *
+     * @return Collection
+     */
+    protected function generateRange(Carbon $startDate, Carbon $endDate)
+    {
         $result = new Collection();
         while ($startDate->lessThan($endDate)) {
             $result->push(clone $startDate);

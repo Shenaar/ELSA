@@ -71,8 +71,8 @@ abstract class AbstractDownloadCommand extends Command
                 }
 
             } catch (PhotoNotFoundException $exception) {
-                $this->output->newLine();
-                $this->output->note($exception->getMessage());
+                /*$this->output->newLine();
+                $this->output->note($exception->getMessage());*/
                 ++$report['Missing'];
             } catch (\Exception $e) {
                 $this->output->newLine();
@@ -98,7 +98,7 @@ abstract class AbstractDownloadCommand extends Command
     /**
      * @return ResultGenerator
      */
-    private function getResultGenerator()
+    protected function getResultGenerator()
     {
         $resultArgument = $this->option('format');
 
@@ -114,10 +114,9 @@ abstract class AbstractDownloadCommand extends Command
      */
     private function preProcess(Photo $photo)
     {
-        foreach ($this->option('processor') as $item) {
-            /** @var PhotoProcessor $processor */
-            $processor = resolve('App\\Service\\PhotoProcessor\\' . ucfirst($item));
+        $processors = $this->getProcessors();
 
+        foreach ($processors as $processor) {
             $photo = $processor->process($photo);
 
             if (is_null($photo)) {
@@ -126,6 +125,22 @@ abstract class AbstractDownloadCommand extends Command
         }
 
         return $photo;
+    }
+
+    /**
+     * @return PhotoProcessor[]
+     */
+    protected function getProcessors()
+    {
+        $result = [];
+
+        foreach ($this->option('processor') as $item) {
+            /** @var PhotoProcessor $processor */
+            $result[] = resolve('App\\Service\\PhotoProcessor\\' . ucfirst($item));
+
+        }
+
+        return $result;
     }
 
     /**

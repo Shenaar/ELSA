@@ -74,6 +74,13 @@ return [
             'root'       => storage_path('dump'),
             'visibility' => 'private',
         ],
+
+        'caching_resize' => [
+            'driver'     => 'local',
+            'root'       => storage_path('resize'),
+            'visibility' => 'private',
+        ],
+
     ],
 
 ];

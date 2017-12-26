@@ -2,8 +2,6 @@
 
 namespace App\Service\CloudCleaner;
 
-use App\Service\CloudCleaner\Contracts\ColorMapper;
-use App\Service\Color;
 use App\Service\Photo;
 
 use Illuminate\Contracts\Cache\Repository;
@@ -37,12 +35,18 @@ class CachingColorMapper extends SimpleColorMapper
         $imagick = new Imagick();
         $imagick->readImageBlob($photo->getData());
         $size = $imagick->getImageGeometry();
-        $key = __CLASS__ . 'cache.' . $photo->getDate()->toDateTimeString() . implode($size, '.');
+        $key = __CLASS__ . '.cache.' . $photo->getDate()->toDateTimeString(). '.' . implode($size, '.');
 
         $imagick->destroy();
 
-        return $this->repository->sear($key, function () use ($photo) {
-            return parent::map($photo);
-        });
+        $cached = $this->repository->get($key);
+
+        if (!$cached) {
+            $cached = parent::map($photo);
+
+            $this->repository->forever($key, $cached);
+        }
+
+        return $cached;
     }
 }
