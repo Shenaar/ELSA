@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Service\CloudCleaner;
+namespace App\Service\ColorMapper;
 
-use App\Service\CloudCleaner\Contracts\ColorMapper;
 use App\Service\Color;
+use App\Service\ColorMapper\Contracts\ColorMapper;
 use App\Service\Photo;
 
 use \Imagick;

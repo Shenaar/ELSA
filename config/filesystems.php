@@ -69,15 +69,15 @@ return [
             'password' => 'electro',
         ],
 
-        'smart_dump' => [
-            'driver'     => 'local',
-            'root'       => storage_path('dump'),
-            'visibility' => 'private',
-        ],
-
         'caching_resize' => [
             'driver'     => 'local',
             'root'       => storage_path('resize'),
+            'visibility' => 'private',
+        ],
+
+        'dump_storage' => [
+            'driver'     => 'local',
+            'root'       => storage_path('dump'),
             'visibility' => 'private',
         ],
 

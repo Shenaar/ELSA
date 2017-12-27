@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Service\CloudCleaner\Contracts\ColorMapper;
 use App\Service\CloudCleaner\LeastWhileCloudCleaner;
+use App\Service\ColorMapper\Contracts\ColorMapper;
 use App\Service\PhotoProcessor\FilterEmpty;
 use App\Service\PhotoProcessor\CachingResize;
 use App\Service\ResultGenerator\FullEarthResult;

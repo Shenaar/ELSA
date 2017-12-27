@@ -2,10 +2,7 @@
 
 namespace App\Service\CloudCleaner;
 
-use App\Service\CloudCleaner\Contracts\ColorMapper;
 use App\Service\Color;
-
-use Illuminate\Support\Collection;
 
 /**
  *
