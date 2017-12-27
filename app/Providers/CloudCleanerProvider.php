@@ -5,7 +5,7 @@ namespace App\Providers;
 
 use App\Service\CloudCleaner\Contracts\CloudCleaner;
 use App\Service\CloudCleaner\FrequencyCloudCleaner;
-use App\Service\CloudCleaner\LeastWhileCloudCleaner;
+use App\Service\CloudCleaner\LeastWhiteCloudCleaner;
 use App\Service\ColorMapper\CachingColorMapper;
 use App\Service\ColorMapper\CachingColorMapperReporter;
 use App\Service\ColorMapper\Contracts\ColorMapper;
@@ -41,6 +41,6 @@ class CloudCleanerProvider extends ServiceProvider
         $this->app->tag(Restorer::class, 'restorer');
 
         $this->app->bind(CloudCleaner::class, FrequencyCloudCleaner::class);
-        $this->app->bind(CloudCleaner::class, LeastWhileCloudCleaner::class);
+        $this->app->bind(CloudCleaner::class, LeastWhiteCloudCleaner::class);
     }
 }

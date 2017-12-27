@@ -9,7 +9,7 @@ use App\Service\Photo;
 /**
  * Chooses the least white pixel.
  */
-class LeastWhileCloudCleaner extends AbstractCloudCleaner
+class LeastWhiteCloudCleaner extends AbstractCloudCleaner
 {
     /**
      * @var Color[][]

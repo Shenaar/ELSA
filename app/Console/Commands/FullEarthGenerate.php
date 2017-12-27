@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Service\CloudCleaner\LeastWhileCloudCleaner;
+use App\Service\CloudCleaner\LeastWhiteCloudCleaner;
 use App\Service\ColorMapper\Contracts\ColorMapper;
 use App\Service\PhotoProcessor\FilterEmpty;
 use App\Service\PhotoProcessor\CachingResize;
@@ -45,7 +45,7 @@ class FullEarthGenerate extends DownloadDaysTime
     protected function getResultGenerator()
     {
         return new FullEarthResult(
-            new LeastWhileCloudCleaner(
+            new LeastWhiteCloudCleaner(
                 app(ColorMapper::class),
                 $this->argument('blackWeight'),
                 $this->argument('whiteWeight')
