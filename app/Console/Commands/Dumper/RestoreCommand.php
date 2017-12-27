@@ -52,6 +52,12 @@ class RestoreCommand extends Command
     {
         $this->directory = $this->getLastDumpDirectory();
 
+        if (!$this->directory) {
+            $this->error('No dumps at all, exiting.');
+
+            return;
+        }
+
         $restorers = collect($app->tagged('restorer'));
 
         $restorers->each(function (CanRestore $item) {
