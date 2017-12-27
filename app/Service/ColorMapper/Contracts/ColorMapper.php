@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\CloudCleaner\Contracts;
+namespace App\Service\ColorMapper\Contracts;
 
 use App\Service\Color;
 use App\Service\Photo;

@@ -51,7 +51,7 @@ class LocalPhotoStorageProvider extends ServiceProvider
                 return $fsManager->disk(self::LOCAL_STORAGE);
             });
 
-        $this->app->tag([CacheCountReport::class, CacheSizeReport::class], 'reports');
+        //$this->app->tag([CacheCountReport::class, CacheSizeReport::class], 'reports');
 
         $this->commands(ClearCacheCommand::class);
     }

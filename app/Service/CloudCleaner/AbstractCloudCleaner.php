@@ -3,7 +3,7 @@
 namespace App\Service\CloudCleaner;
 
 use App\Service\CloudCleaner\Contracts\CloudCleaner;
-use App\Service\CloudCleaner\Contracts\ColorMapper;
+use App\Service\ColorMapper\Contracts\ColorMapper;
 
 /**
  * Can map colors for a photo.

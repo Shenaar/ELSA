@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Service\Reporter\StatusReporter;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Foundation\Application;
 
@@ -49,8 +50,10 @@ class Monitor extends Command
             } catch (\Exception $ex) {
                 continue;
             }
+
+            $this->output->writeln(Carbon::now()->toDateTimeString());
             $this->output->table(['Name', 'Value'], array_values($report));
-            $this->output->write("\e[" . (count($report) + 1 + 4) . "A");
+            $this->output->write("\e[" . (count($report) + 1 + 4 + 1) . "A");
 
             sleep($this->option('delay'));
         }

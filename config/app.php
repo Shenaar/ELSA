@@ -185,6 +185,8 @@ return [
         App\Providers\PhotoStorage\SmartPhotoStorageProvider::class,
 
         App\Providers\CloudCleanerProvider::class,
+        App\Providers\DumperProvider::class,
+
     ],
 
     /*

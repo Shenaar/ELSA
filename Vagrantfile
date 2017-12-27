@@ -73,10 +73,10 @@ Vagrant.configure("2") do |config|
 
     echo 'alias monitor="clear && php artisan monitor --delay=10"' >> /home/vagrant/.bashrc
     echo 'alias status="php artisan status"' >> /home/vagrant/.bashrc
-    echo 'alias dump="php artisan smart:dump"' >> /home/vagrant/.bashrc
-    echo 'alias restore="php artisan smart:restore"' >> /home/vagrant/.bashrc
+    echo 'alias dump="php artisan dump"' >> /home/vagrant/.bashrc
+    echo 'alias restore="php artisan restore"' >> /home/vagrant/.bashrc
 
-    cd /vagrant && php artisan smart:restore
+    cd /vagrant && php artisan restore
     composer self-update
   SHELL
 

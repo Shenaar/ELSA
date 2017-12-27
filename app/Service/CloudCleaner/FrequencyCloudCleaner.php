@@ -2,8 +2,8 @@
 
 namespace App\Service\CloudCleaner;
 
-use App\Service\CloudCleaner\Contracts\ColorMapper;
 use App\Service\Color;
+use App\Service\ColorMapper\Contracts\ColorMapper;
 use App\Service\Photo;
 
 /**

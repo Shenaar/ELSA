@@ -2,8 +2,8 @@
 
 namespace App\Service\CloudCleaner;
 
-use App\Service\CloudCleaner\Contracts\ColorMapper;
 use App\Service\Color;
+use App\Service\ColorMapper\Contracts\ColorMapper;
 use App\Service\Photo;
 
 /**
@@ -17,11 +17,26 @@ class LeastWhileCloudCleaner extends AbstractCloudCleaner
     private $resultMap;
 
     /**
-     * @param ColorMapper $colorMapper
+     * @var float
      */
-    public function __construct(ColorMapper $colorMapper)
+    private $blackWeight;
+
+    /**
+     * @var float
+     */
+    private $whiteWeight;
+
+    /**
+     * @param ColorMapper $colorMapper
+     * @param float $blackWeight
+     * @param float $whiteWeight
+     */
+    public function __construct(ColorMapper $colorMapper, float $blackWeight = 0.0, float $whiteWeight = 1.0)
     {
         parent::__construct($colorMapper);
+
+        $this->blackWeight = $blackWeight;
+        $this->whiteWeight = $whiteWeight;
     }
 
     /**
@@ -50,7 +65,7 @@ class LeastWhileCloudCleaner extends AbstractCloudCleaner
 
                 $oldColor = $this->resultMap[$x][$y];
 
-                if ($this->distanceFromWhite($color) > $this->distanceFromWhite($oldColor)) {
+                if ($this->getWeight($color) > $this->getWeight($oldColor)) {
                     $this->resultMap[$x][$y] = $color;
                 }
             }
@@ -74,18 +89,28 @@ class LeastWhileCloudCleaner extends AbstractCloudCleaner
     }
 
     /**
-     * Returns "distance" between the color and white.
+     * Returns weight of the color.
      *
      * @param Color $color
      *
      * @return float
      */
-    protected function distanceFromWhite(Color $color)
+    protected function getWeight(Color $color)
     {
-        return sqrt(
+        $white =
+            $this->whiteWeight * sqrt(
             pow(255 - $color->getRed(), 2) +
-            pow(255 - $color->getGreen(), 2) +
-            pow(255 - $color->getBlue(), 2)
-        );
+                pow(255 - $color->getGreen(), 2) +
+                pow(255 - $color->getBlue(), 2)
+
+            );
+        $black =
+            $this->blackWeight * sqrt(
+                pow(0 - $color->getRed(), 2) +
+                pow(0 - $color->getGreen(), 2) +
+                pow(0 - $color->getBlue(), 2)
+            );
+
+        return $white + $black;
     }
 }

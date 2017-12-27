@@ -13,12 +13,12 @@ class Resize implements PhotoProcessor
     /**
      * @var int
      */
-    private $width;
+    protected $width;
 
     /**
      * @var int
      */
-    private $height;
+    protected $height;
 
     /**
      * Resize constructor.
