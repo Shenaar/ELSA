@@ -45,11 +45,11 @@ class CachingColorMapper extends SimpleColorMapper
         $imagick = new Imagick();
         $imagick->readImageBlob($photo->getData());
         $size = $imagick->getImageGeometry();
-        $key = __CLASS__ . '.cache.' . $photo->getDate()->toDateTimeString(). '.' . implode($size, '.');
+        $key = $photo->getDate()->toDateTimeString(). '.' . implode($size, '.');
 
         $imagick->destroy();
 
-        $cached = $this->repository->get($key);
+        $cached = $this->repository->get(__CLASS__ . '.cache.' . $key);
 
         if (!$cached) {
             $result = parent::map($photo);

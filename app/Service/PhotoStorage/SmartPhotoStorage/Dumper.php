@@ -4,6 +4,7 @@ namespace App\Service\PhotoStorage\SmartPhotoStorage;
 
 use App\Service\Dumper\Contracts\CanDump;
 use App\Service\Dumper\Exceptions\NothingToDumpException;
+
 use Illuminate\Contracts\Filesystem\Filesystem;
 
 /**

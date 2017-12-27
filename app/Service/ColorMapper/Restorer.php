@@ -31,9 +31,15 @@ class Restorer implements CanRestore
     {
         $path = $directory . '/mapper/';
 
+        $files = collect($filesystem->allFiles($path));
+
+        if ($files->count() === 0) {
+            throw new NothingToRestoreException();
+        }
+
         $this->colorMapper->clearCache();
 
-        collect($filesystem->allFiles($path))
+        $files
             ->each(function (string $file) use ($filesystem) {
                 $key = array_last(explode('/', $file));
 
