@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Service\ColorMapper\Contracts\ColorMapper;
+use App\Service\PhotoProcessor\CachingResize;
 use App\Service\PhotoProcessor\FilterEmpty;
 use App\Service\ResultGenerator\CloudsMapResult;
 

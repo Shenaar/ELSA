@@ -23,6 +23,11 @@ class FolderResult implements ResultGenerator
     private $photos;
 
     /**
+     * @var string
+     */
+    private $path;
+
+    /**
      * @param Filesystem $fileManager
      */
     public function __construct(Filesystem $fileManager)
@@ -32,11 +37,26 @@ class FolderResult implements ResultGenerator
     }
 
     /**
+     * @param string $path
+     */
+    public function setPath(string $path)
+    {
+        $this->path = $path;
+    }
+
+    /**
      * @inheritdoc
      */
     public function addPhoto(Photo $photo)
     {
-        $this->photos->push($photo);
+        if (!\File::exists($this->path)) {
+            \File::makeDirectory($this->path);
+        }
+
+        \File::put(
+            $this->path . '/' . $photo->getDate()->toDateTimeString() . '.jpg',
+            $photo->getData()
+        );
     }
 
     /**
@@ -44,14 +64,6 @@ class FolderResult implements ResultGenerator
      */
     public function store(string $path)
     {
-        \File::deleteDirectory($path);
-        \File::makeDirectory($path);
-
-        $this->photos->each(function (Photo $photo) use ($path) {
-            \File::put(
-                $path . '/' . $photo->getDate()->toDateTimeString() . '.jpg',
-                $photo->getData()
-            );
-        });
+        return;
     }
 }
