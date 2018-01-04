@@ -7,8 +7,10 @@ use App\Service\Dumper\Exceptions\NothingToDumpException;
 
 use Carbon\Carbon;
 
+use Chumper\Zipper\Zipper;
+
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Filesystem\FilesystemAdapter as Filesystem;
 use Illuminate\Contracts\Foundation\Application;
 
 class DumpCommand extends Command
@@ -38,20 +40,30 @@ class DumpCommand extends Command
     private $directory;
 
     /**
-     * @param Filesystem $filesystem
+     * @var Zipper
      */
-    public function __construct(Filesystem $filesystem)
+    private $zipper;
+
+    /**
+     * @param Filesystem $filesystem
+     * @param Zipper $zipper
+     */
+    public function __construct(Filesystem $filesystem, Zipper $zipper)
     {
         parent::__construct();
 
         $this->filesystem = $filesystem;
+        $this->zipper = $zipper;
     }
 
     /**
      * @param Application $app
+     *
+     * @throws \Exception
      */
     public function handle(Application $app)
     {
+        $startTime = microtime(true);
         $this->directory = Carbon::now()->format('Y.m.d H:i');
         $this->filesystem->makeDirectory($this->directory);
         $dumpers = collect($app->tagged('dumper'));
@@ -69,5 +81,14 @@ class DumpCommand extends Command
 
             $this->output->writeln('Finished dumping');
         });
+
+        $this->output->writeln('Zipping...');
+
+        $zip = $this->zipper->make($this->filesystem->path($this->directory) . '.zip');
+        $zip->add($this->filesystem->path($this->directory));
+        $zip->close();
+
+        $this->output->writeln('Dump is written in ' . $this->filesystem->path($this->directory) . '.zip');
+        $this->output->success(sprintf('Finished in %.2fs', (microtime(true) - $startTime)));
     }
 }

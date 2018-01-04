@@ -50,6 +50,12 @@ abstract class AbstractDownloadCommand extends Command
         $dates = $this->getDatesList();
         $generator = $this->getResultGenerator();
 
+        $path = storage_path('results/' . ($this->option('filename') ? : $this->getFilename()));
+
+        if (method_exists($generator, 'setPath')) {
+            $generator->setPath($path);
+        }
+
         $bar = $this->output->createProgressBar($dates->count());
         $report = [
             'Success' => 0,
@@ -89,7 +95,7 @@ abstract class AbstractDownloadCommand extends Command
         $this->output->newLine();
         $this->output->table(array_keys($report), [array_values($report)]);
 
-        $path = storage_path('results/' . ($this->option('filename') ? : $this->getFilename()));
+
         $this->output->writeln('Storing result as a ' . get_class($generator) . ' in ' . $path);
         $generator->store($path);
         $this->output->success(sprintf('Finished in %.2fs', (microtime(true) - $startTime)));

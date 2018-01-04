@@ -10,8 +10,6 @@ use App\Service\ResultGenerator\FullEarthResult;
 
 use Carbon\Carbon;
 
-use Illuminate\Support\Collection;
-
 class FullEarthGenerate extends DownloadDaysTime
 {
     /**
@@ -62,21 +60,6 @@ class FullEarthGenerate extends DownloadDaysTime
             app(FilterEmpty::class),
             app(CachingResize::class),
         ];
-    }
-
-
-    /**
-     * @inheritdoc
-     */
-    protected function generateRange(Carbon $startDate, Carbon $endDate)
-    {
-        $result = new Collection();
-        while ($startDate->lessThan($endDate)) {
-            $result->push(clone $startDate);
-            $startDate->addDay();
-        }
-
-        return $result;
     }
 
     /**
