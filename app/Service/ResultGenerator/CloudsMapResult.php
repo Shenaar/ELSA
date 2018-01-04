@@ -6,7 +6,9 @@ use App\Service\Color;
 use App\Service\ColorMapper\Contracts\ColorMapper;
 use App\Service\Photo;
 use App\Service\ResultGenerator\Contracts\ResultGenerator;
+
 use Illuminate\Filesystem\Filesystem;
+
 use Imagick;
 use ImagickDraw;
 use ImagickPixel;
