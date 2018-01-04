@@ -10,8 +10,7 @@ use Carbon\Carbon;
 use Chumper\Zipper\Zipper;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\FilesystemAdapter as Filesystem;
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Filesystem\FilesystemAdapter;
 
 class DumpCommand extends Command
 {
@@ -30,7 +29,7 @@ class DumpCommand extends Command
     protected $description = 'Dumps the data.';
 
     /**
-     * @var Filesystem
+     * @var FilesystemAdapter
      */
     private $filesystem;
 
@@ -45,10 +44,10 @@ class DumpCommand extends Command
     private $zipper;
 
     /**
-     * @param Filesystem $filesystem
+     * @param FilesystemAdapter $filesystem
      * @param Zipper $zipper
      */
-    public function __construct(Filesystem $filesystem, Zipper $zipper)
+    public function __construct(FilesystemAdapter $filesystem, Zipper $zipper)
     {
         parent::__construct();
 
@@ -57,16 +56,29 @@ class DumpCommand extends Command
     }
 
     /**
-     * @param Application $app
-     *
      * @throws \Exception
      */
-    public function handle(Application $app)
+    public function handle()
     {
         $startTime = microtime(true);
         $this->directory = Carbon::now()->format('Y.m.d H:i');
         $this->filesystem->makeDirectory($this->directory);
-        $dumpers = collect($app->tagged('dumper'));
+
+        $this->dump();
+
+        $this->archive();
+
+        $this->cleanup();
+
+        $this->output->success(sprintf('Finished in %.2fs', (microtime(true) - $startTime)));
+    }
+
+    /**
+     * Iterates over all dumpers and runs them.
+     */
+    protected function dump()
+    {
+        $dumpers = collect($this->getLaravel()->tagged('dumper'));
 
         $dumpers->each(function (CanDump $item) {
             $this->output->writeln('Started dumping for ' . get_class($item));
@@ -81,7 +93,15 @@ class DumpCommand extends Command
 
             $this->output->writeln('Finished dumping');
         });
+    }
 
+    /**
+     * Archives the dump data.
+     *
+     * @throws \Exception
+     */
+    protected function archive()
+    {
         $this->output->writeln('Zipping...');
 
         $zip = $this->zipper->make($this->filesystem->path($this->directory) . '.zip');
@@ -89,6 +109,14 @@ class DumpCommand extends Command
         $zip->close();
 
         $this->output->writeln('Dump is written in ' . $this->filesystem->path($this->directory) . '.zip');
-        $this->output->success(sprintf('Finished in %.2fs', (microtime(true) - $startTime)));
+    }
+
+    /**
+     * Cleans up temporary files.
+     */
+    protected function cleanup()
+    {
+        $this->output->writeln('Cleaning up...');
+        $this->filesystem->deleteDirectory($this->directory);
     }
 }

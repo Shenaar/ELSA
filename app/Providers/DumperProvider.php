@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Console\Commands\Dumper\DumpCommand;
 use App\Console\Commands\Dumper\RestoreCommand;
 
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\ServiceProvider;
@@ -41,7 +40,7 @@ class DumperProvider extends ServiceProvider
             });
 
         $this->app->when(RestoreCommand::class)
-            ->needs(Filesystem::class)
+            ->needs(FilesystemAdapter::class)
             ->give(function () {
                 /** @var FilesystemManager $fsManager */
                 $fsManager = $this->app->make(FilesystemManager::class);

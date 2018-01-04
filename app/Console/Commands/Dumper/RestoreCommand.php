@@ -5,9 +5,11 @@ namespace App\Console\Commands\Dumper;
 use App\Service\Dumper\Contracts\CanRestore;
 use App\Service\Dumper\Exceptions\NothingToRestoreException;
 
+use Chumper\Zipper\Zipper;
+
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Filesystem\FilesystemAdapter;
 
 class RestoreCommand extends Command
 {
@@ -26,7 +28,7 @@ class RestoreCommand extends Command
     protected $description = 'Restores the data.';
 
     /**
-     * @var Filesystem
+     * @var FilesystemAdapter
      */
     private $filesystem;
 
@@ -36,29 +38,69 @@ class RestoreCommand extends Command
     private $directory;
 
     /**
-     * @param Filesystem $filesystem
+     * @var Zipper
      */
-    public function __construct(Filesystem $filesystem)
+    private $zipper;
+
+    /**
+     * @param FilesystemAdapter $filesystem
+     * @param Zipper $zipper
+     */
+    public function __construct(FilesystemAdapter $filesystem, Zipper $zipper)
     {
         parent::__construct();
 
         $this->filesystem = $filesystem;
+        $this->zipper = $zipper;
     }
 
     /**
      * @param Application $app
+     *
+     * @throws \Exception
      */
     public function handle(Application $app)
     {
-        $this->directory = $this->getLastDumpDirectory();
+        $startTime = microtime(true);
 
-        if (!$this->directory) {
+        $file = $this->getLastDumpFile();
+        if (!$file) {
             $this->error('No dumps at all, exiting.');
 
             return;
         }
 
-        $restorers = collect($app->tagged('restorer'));
+        $this->extract($file);
+
+        $this->restore();
+
+        $this->cleanup();
+
+        $this->output->success(sprintf('Finished in %.2fs', (microtime(true) - $startTime)));
+    }
+
+    /**
+     * @param string $file
+     *
+     * @throws \Exception
+     */
+    protected function extract(string $file)
+    {
+        $this->output->writeln('Restoring from ' . $file);
+
+        $this->directory = substr($file, 0, -4);
+        $this->filesystem->deleteDirectory($this->directory);
+
+        $zip = $this->zipper->make($this->filesystem->path($file));
+        $zip->extractTo($this->filesystem->path($this->directory));
+    }
+
+    /*
+     * Iterates over restorers and runs them.
+     */
+    protected function restore()
+    {
+        $restorers = collect($this->getLaravel()->tagged('restorer'));
 
         $restorers->each(function (CanRestore $item) {
             $this->output->writeln('Started restoring for ' . get_class($item));
@@ -76,15 +118,27 @@ class RestoreCommand extends Command
     }
 
     /**
+     * Cleans up temporary files.
+     */
+    protected function cleanup()
+    {
+        $this->output->writeln('Cleaning up...');
+        $this->filesystem->deleteDirectory($this->directory);
+    }
+
+    /**
      * @return string
      */
-    private function getLastDumpDirectory()
+    private function getLastDumpFile()
     {
-        $directory =
-            collect($this->filesystem->directories())
+        $file =
+            collect($this->filesystem->files())
+                ->filter(function (string $filename) {
+                    return ends_with($filename, '.zip');
+                })
                 ->sort()
                 ->last();
 
-        return $directory;
+        return $file;
     }
 }
