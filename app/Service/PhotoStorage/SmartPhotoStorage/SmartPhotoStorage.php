@@ -101,6 +101,6 @@ class SmartPhotoStorage implements PhotoStorage
 
         return $date->isFuture() ||
             ($hour === 8 && $minute === 30) || ($hour === 9) || ($hour === 10 && $minute === 0) ||
-            $this->cache->search($date->toDateTimeString());
+            $this->cache->search($date->toDateTimeString()) !== false;
     }
 }
