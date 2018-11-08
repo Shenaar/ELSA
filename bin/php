@@ -1,0 +1,7 @@
+#!/bin/bash
+
+docker run -it -w="/app" \
+    --volume $PWD:/app \
+    --user $(id -u):$(id -g) \
+    elsa_php \
+    php "$@"

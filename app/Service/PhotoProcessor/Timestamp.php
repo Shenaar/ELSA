@@ -58,6 +58,7 @@ class Timestamp implements PhotoProcessor
         $draw->setGravity(\Imagick::GRAVITY_SOUTHEAST);
         $draw->setFillColor($this->color);
         $draw->setFontSize($this->fontSize);
+        $draw->setFont('DejaVu-Sans');
 
         $image->annotateImage($draw, $this->x, $this->y, 0, $photo->getDate()->format('d.m.Y H:i'));
 

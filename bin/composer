@@ -1,0 +1,8 @@
+#!/bin/bash
+
+docker run --rm -it -w="/app" \
+    --volume $PWD:/app \
+    --volume composer:/tmp \
+    --user $(id -u):$(id -g) \
+    composer \
+    "$@"

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+docker run -it --init -w="/app" \
+    --volume $PWD:/app \
+    --user $(id -u):$(id -g) \
+    --network=elsa_default \
+    elsa_php \
+    php -dmemory_limit=5G artisan "$@" -vvv
