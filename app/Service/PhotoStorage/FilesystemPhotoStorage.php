@@ -47,9 +47,8 @@ class FilesystemPhotoStorage implements PhotoStorage
         foreach ($this->pathsGenerator->getForDate($date) as $path) {
             try {
                 $file = $this->download($path);
-                $photo = new Photo($date, $file);
 
-                return $photo;
+                return new Photo($date, $file);
             } catch (FileNotFoundException $exception) {
 
             }

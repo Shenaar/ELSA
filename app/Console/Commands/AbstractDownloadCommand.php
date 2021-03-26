@@ -77,8 +77,8 @@ abstract class AbstractDownloadCommand extends Command
                 }
 
             } catch (PhotoNotFoundException $exception) {
-                /*$this->output->newLine();
-                $this->output->note($exception->getMessage());*/
+                $this->output->newLine();
+                $this->output->note($exception->getMessage());
                 ++$report['Missing'];
             } catch (\Exception $e) {
                 $this->output->newLine();

@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Service\PhotoProcessor\Blacklisted;
 use App\Service\PhotoProcessor\CachingResize;
 use App\Service\PhotoProcessor\Resize;
 use App\Service\PhotoProcessor\Timestamp;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Foundation\Application;
@@ -48,6 +50,15 @@ class PhotoProcessorProvider extends ServiceProvider
                 $config->get('process.resize.width'),
                 $config->get('process.resize.height'),
                 $fsManager->disk('caching_resize')
+            );
+        });
+
+        $this->app->bind(Blacklisted::class, function (Application $app) use ($config) {
+            return new Blacklisted(
+                collect($config->get('process.blacklisted'))
+                    ->map(function ($dateTime) {
+                        return new Carbon($dateTime);
+                    })
             );
         });
     }

@@ -25,7 +25,7 @@ class SmartPathsGenerator implements PathsGenerator
      *
      * @param PathGenerator[] $generators
      */
-    public function __construct(array $generators)
+    public function __construct(iterable $generators)
     {
         $this->generators = collect($generators);
     }

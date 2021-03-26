@@ -64,7 +64,8 @@ return [
 
         'electro_l_2_ftp' => [
             'driver'   => 'ftp',
-            'host'     => 'ftp.ntsomz.ru',
+            'host'     => 'ntsomz.gptl.ru',
+            'port'     => 2121,
             'username' => 'electro',
             'password' => 'electro',
         ],

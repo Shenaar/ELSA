@@ -14,8 +14,6 @@ services:
     image: redis
     volumes:
       - redisData:/data
-    ports:
-      - 6379:6379
 
 volumes:
   dbdata:

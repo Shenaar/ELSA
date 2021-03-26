@@ -4,6 +4,7 @@ namespace App\Service\ResultGenerator;
 
 use App\Service\Photo;
 use App\Service\ResultGenerator\Contracts\ResultGenerator;
+use Imagick;
 
 /**
  * Generates a GIF using the photos.
@@ -11,7 +12,7 @@ use App\Service\ResultGenerator\Contracts\ResultGenerator;
 class GifResult implements ResultGenerator
 {
     /**
-     * @var \Imagick
+     * @var Imagick
      */
     private $gif;
 
@@ -25,7 +26,7 @@ class GifResult implements ResultGenerator
      */
     public function __construct()
     {
-        $this->gif = new \Imagick();
+        $this->gif = new Imagick();
         $this->gif->setFormat('gif');
         $this->count = 0;
     }
@@ -35,9 +36,9 @@ class GifResult implements ResultGenerator
      */
     public function addPhoto(Photo $photo)
     {
-        $frame = new \Imagick();
+        $frame = new Imagick();
         $frame->readImageBlob($photo->getData());
-        $frame->setImageDelay(10);
+        $frame->setImageDelay(20);
 
         $this->gif->addImage($frame);
         ++$this->count;
